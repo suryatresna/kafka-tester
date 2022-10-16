@@ -1,0 +1,39 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: consumerapp
+spec:
+  type: LoadBalancer
+  selector:
+    app: consumerapp
+  ports:
+    - name: consumerapp
+      protocol: TCP
+      port: 8000
+      targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consumerapp
+  labels:
+    app: consumerapp
+spec:
+  selector:
+    matchLabels:
+      app: consumerapp
+  template:
+    metadata:
+      labels:
+        app: consumerapp
+    spec:
+      containers:
+      - env:
+          - name: APPENV
+            value: "development"
+        name: consumerapp
+        image: consumerapp:latest
+        ports:
+        - containerPort: 8000
+          name: consumerapp

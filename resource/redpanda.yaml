@@ -1,0 +1,76 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: redpanda
+  name: redpanda
+spec:
+  ports:
+    - name: "8081"
+      port: 8081
+      targetPort: 8081
+    - name: "8082"
+      port: 8082
+      targetPort: 8082
+    - name: "9092"
+      port: 9092
+      targetPort: 9092
+    - name: "29092"
+      port: 29092
+      targetPort: 29092
+  selector:
+    io.kompose.service: redpanda
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: redpanda
+  name: redpanda
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: redpanda
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: redpanda
+    spec:
+      containers:
+        - args:
+            - redpanda start
+            - --smp 1
+            - --overprovisioned
+            - --node-id 0
+            - --kafka-addr PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092
+            - --advertise-kafka-addr PLAINTEXT://redpanda:29092,OUTSIDE://redpanda.default.svc.cluster.local:9092
+            - --pandaproxy-addr 0.0.0.0:8082
+            - --advertise-pandaproxy-addr localhost:8082
+          image: vectorized/redpanda:v21.11.11
+          name: redpanda
+          ports:
+            - containerPort: 8081
+            - containerPort: 8082
+            - containerPort: 9092
+            - containerPort: 29092
+          resources: {}
+      restartPolicy: Always
+status: {}
+

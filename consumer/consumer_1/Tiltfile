@@ -1,0 +1,22 @@
+docker_build('consumerapp','.', dockerfile='Dockerfile')
+
+k8s_yaml([
+    'app.yaml',
+],  allow_duplicates=True)
+
+k8s_resource(
+    workload='consumerapp', 
+    port_forwards=[
+        port_forward(8000, 8000)
+    ],
+    resource_deps=[
+        "redpanda",
+    ],
+    labels=['service']
+)
+
+local_resource(
+    'initialize-app',
+    cmd='./initialize.sh',
+    auto_init=False
+)

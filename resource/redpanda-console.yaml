@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: redpanda-console
+  name: redpanda-console
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: redpanda-console
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.1 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: redpanda-console
+    spec:
+      containers:
+        - env:
+            - name: KAFKA_BROKERS
+              value: "redpanda-0:29092"
+          image: docker.redpanda.com/vectorized/console:latest
+          name: redpanda-console
+          ports:
+            - containerPort: 8080
+          resources: {}
+      restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.1 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: redpanda-console
+  name: redpanda-console
+spec:
+  ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+  selector:
+    io.kompose.service: redpanda-console
+status:
+  loadBalancer: {}
+

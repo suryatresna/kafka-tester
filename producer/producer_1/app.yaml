@@ -1,0 +1,39 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: producerapp
+spec:
+  type: LoadBalancer
+  selector:
+    app: producerapp
+  ports:
+    - name: producerapp
+      protocol: TCP
+      port: 8000
+      targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: producerapp
+  labels:
+    app: producerapp
+spec:
+  selector:
+    matchLabels:
+      app: producerapp
+  template:
+    metadata:
+      labels:
+        app: producerapp
+    spec:
+      containers:
+      - env:
+          - name: APPENV
+            value: "development"
+        name: producerapp
+        image: producerapp:latest
+        ports:
+        - containerPort: 8000
+          name: producerapp

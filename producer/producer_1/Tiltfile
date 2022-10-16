@@ -1,0 +1,16 @@
+docker_build('producerapp','.', dockerfile='Dockerfile')
+
+k8s_yaml([
+    'app.yaml',
+],  allow_duplicates=True)
+
+k8s_resource(
+    workload='producerapp', 
+    port_forwards=[
+        port_forward(8001, 8001)
+    ],
+    resource_deps=[
+        "redpanda",
+    ],
+    labels=['service']
+)
