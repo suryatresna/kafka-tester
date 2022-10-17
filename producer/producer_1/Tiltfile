@@ -10,7 +10,8 @@ k8s_resource(
         port_forward(8001, 8001)
     ],
     resource_deps=[
-        "redpanda",
+        "redpanda:statefulset",
+        "initialize-app"
     ],
     labels=['service']
 )

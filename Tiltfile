@@ -12,7 +12,7 @@ include("producer/producer_1/Tiltfile")
 
 
 k8s_yaml([
-    # 'resource/redpanda.yaml',
+    
     'resource/redpanda-console.yaml',
 ],  allow_duplicates=True)
 
@@ -33,7 +33,7 @@ k8s_resource(
         port_forward(8080, 8080)
     ],
     resource_deps=[
-        "redpanda"
+        "redpanda:statefulset"
     ],
     labels=['monitor']
 )

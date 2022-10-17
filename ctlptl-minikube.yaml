@@ -1,0 +1,10 @@
+apiVersion: ctlptl.dev/v1alpha1
+kind: Cluster
+product: minikube
+registry: ctlptl-registry
+kubernetesVersion: v1.25.2
+minikube:
+  startFlags:
+    - --driver=docker
+    - --nodes=2
+    - --network=minikube

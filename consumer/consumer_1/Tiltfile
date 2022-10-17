@@ -10,7 +10,8 @@ k8s_resource(
         port_forward(8000, 8000)
     ],
     resource_deps=[
-        "redpanda",
+        "redpanda:statefulset",
+        
     ],
     labels=['service']
 )

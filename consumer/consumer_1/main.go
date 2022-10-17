@@ -12,9 +12,9 @@ func main() {
 	var (
 		ctx     = context.Background()
 		brokers = []string{
-			"redpanda-0.default.svc.cluster.local:9092",
-			"redpanda-1.default.svc.cluster.local:9092",
-			"redpanda-2.default.svc.cluster.local:9092",
+			"redpanda-0.redpanda.default.svc.cluster.local.:9093",
+			"redpanda-1.redpanda.default.svc.cluster.local.:9093",
+			"redpanda-2.redpanda.default.svc.cluster.local.:9093",
 		}
 		group = "consumerapp"
 		topic = "onTestConsumer"
